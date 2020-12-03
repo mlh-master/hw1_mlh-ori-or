@@ -380,213 +380,213 @@ print("F1 score is: " + str("{0:.2f}".format(100 * metrics.f1_score(y_test, y_pr
 
 selected_feat = 'LB'
 
-# odds, ratio = odds_ratio(w, X_, selected_feat=selected_feat)  # you have to fill the right X first
-#
-# print(f'The odds ratio of {selected_feat} for Normal is {ratio}')
-# print(f"The odds to be labeled as 'Normal' is {odds}")
-#
-#
-# # ### Question:
-# # **Q6:** What is the meaning of your results? Explain the difference between odds_ratio and odds.
-#
-# # ### Answers:
-# # **Q6:**
-#
-# # Now let's see if normalization and standardization help us. Fill the next cell and print the three accuracies of the standardized and normalized training and testing data. *Important notes*:
-# #
-# # * Avoid information leakage! (from the test set to the train set)
-# # * Do not apply the `norm_standard (nsd)` function on the labels.
-# # * Set the `flag` argument to `False` when using `nsd` function.
-#
-# # In[ ]:
-#
-#
-# # Implement your code here:
-# mode = # choose a mode from the `nsd`
-# y_pred, w_norm_std = pred_log(logreg,) # complete this function using nsd function
-# print("Accuracy is: " + str("{0:.2f}".format(100 * metrics.accuracy_score(y_test, y_pred))) + "%")
-# print("F1 score is: " + str("{0:.2f}".format(100 * metrics.f1_score(y_test, y_pred, average='macro'))) + "%")
-#
-#
-# # You can choose now one of the training-testing dataset and stick to it. Let's visualize our learned parameters. Use your chosen weight matrix as an input to the function `w_no_p_table` in the next cell.
-#
-# # In[ ]:
-#
-#
-# input_mat =  # Fill this argument
-# w_no_p_table(input_mat,orig_feat)
-#
-#
-# # ### Questions:
-# # **Q7:** Mention one advantage of using cross entropy as the cost function.
-# #
-# #
-# # **Q8:** By selecting one feature at a time and compare their learned weights by looking at plots we had, what can you tell about the weights relations? Why does it happen? **Hint:** notice the sign of the weights and remember that an exponent is a monotonic function.
-#
-# # ### Answers:
-# # **Q7:**
-# #
-# # **Q8:**
-#
-# # Ok, now let's recall that in the lecture you saw that accuracy is not always our best measure. Sensitivity and specificity can be much more informative and important mostly. The choice to train a model to have better results in sensitivity aspect rather than specificity or vice versa depends on our application.
-#
-# # In[ ]:
-#
-#
-# cnf_matrix = metrics.confusion_matrix(y_test, y_pred)
-# ax = plt.subplot()
-# sns.heatmap(cnf_matrix, annot=True, xticklabels=['Normal','Suspect','Pathology'], yticklabels=['Normal','Suspect','Pathology'])
-# ax.set(ylabel='True labels', xlabel='Predicted labels')
-# plt.show()
-#
-#
-# # ### Questions:
-# # **Q9:** What do you think is more important to us with this data? What is the clinical risk/cost for False Positive (FP) and False Negative (FN)?
-#
-# # ### Answers:
-# # **Q9:**
-#
-# # So, now we will try to handle one of the main issues in learning which is called **overfitting** and one way to deal with it is called **regularization**.
-# #
-# # There are several types of regularizations and in this assignment we will experience two of them:
-# #
-# # 1) Loss regularization.
-# #
-# # 2) Validation.
-# #
-# # The loss function is a function that takes the predicted values and the labels and *measures* how "close" they are to each other. Our demand is that this "distance" (metric) would be as low as possible. In addition to it, we can add more "demands" that can be represented mathematically. For example, we can demand that the number of coefficients won't get to large or we can try to restrict their values. A more physical example is a demand that our signal has to be smooth. When we try to minimize the new loss function we actually try to find the result which is the compromise of our demands. We can also "favor" one demand over another using **regularization parameters**.
-# #
-# # You saw in the lecture "demands" on the learned weights and represented those demands mathematically using $ L_1 $ and $ L_2 $ norms. The regularization parameter was denoted as $\lambda$ (please notice that sometimes it is common to use the notation of $ c $ where $\lambda = c^{-1}$). Now it's your turn to become artists! Change and/or add arguments to *LogisticRegression* class in the next cell and perform learning using two regularizations: $ L_1 $ and $ L_2 $. Examine your results using the confusion matrix as we did before. Tune your regularization parameter until you get a result that you think is reasonable and that brings the sensitivity/specificity (depending on what you chose before) to the maximum.
-#
-# # In[ ]:
-#
-#
-# # Implement your code here:
-# mode = # choose a mode from the `nsd`
-# logreg_l2 = LogisticRegression(solver='saga', multi_class='ovr', max_iter=10000) # complete the arguments for L2
-# y_pred_2, w2 = pred_log(logreg_l2,) # complete this function using nsd function
-# cnf_matrix = metrics.confusion_matrix(y_test, y_pred_2)
-# ax1 = plt.subplot(211)
-# sns.heatmap(cnf_matrix, annot=True, xticklabels=['Normal','Suspect','Pathology'], yticklabels=['Normal','Suspect','Pathology'])
-# ax1.set(ylabel='True labels', xlabel='Predicted labels')
-#
-# logreg_l1 = LogisticRegression(solver='saga', multi_class='ovr', max_iter=10000) # complete the arguments for L1
-# y_pred_1, w1 = pred_log(logreg_l1,)  # complete this function using nsd function
-# cnf_matrix = metrics.confusion_matrix(y_test, y_pred_1)
-# ax2 = plt.subplot(212)
-# sns.heatmap(cnf_matrix, annot=True, xticklabels=['Normal','Suspect','Pathology'], yticklabels=['Normal','Suspect','Pathology'])
-# ax2.set(ylabel='True labels', xlabel='Predicted labels')
-# plt.show()
-#
-#
-# # Now that you are happy with your results, let's compare the coefficients of the two norms.\
-# # Choose two weighting matrices (one calculated using $ L_2 $ and the other calculated using $ L_1 $) and use them as inputs in `w_all_tbl` function. This function sorts the weights according to their $ L_2 $ norm (so the first argument has to be the matrix of $ L_2 $) and compares them to $L_1$.
-#
-# # In[ ]:
-#
-#
-# w_all_tbl(w2, w1, orig_feat)
-#
-#
-# # Notice that the features are ordered differently because they are sorted according to $ L_2 $ values.
-#
-# # ### Questions:
-# # **Q10:** What is the difference that you can see when plotting $ L_1 $ vs. $ L_2 $? Could you expect it ahead?
-# #
-# # **Q11:** From the feature analysis, which of the features are most suggestive of fetuses at risk (pathology) versus normal? Elaborate on the meaning of these features in relation to the underlying physiology. You might want to have a look at the following [link](http://perinatology.com/Fetal%20Monitoring/Intrapartum%20Monitoring.htm).
-#
-# # ### Answers:
-# # **Q10:**
-# #
-# #
-# # **Q11:**
-#
-# # Now we will use a method that help us choose what we call *hyperparameters* of the model. This is also a method of regularization and it is called **validation**. There are several types of validation and here we will use *stratified K-fold cross validation*. The hyperparameters that we would like to choose are the norms that we want to train with and the regularization parameter. Again, we use stratification for the folds to prevent biased learning.
-# #
-# # Implement the function `cv_kfold` in `lin_classifier` module. We will use `X_train` as our training set that will be iteratively divided into $ K-1 $ training sets and one validation set. **Notice:** choose wisely where to apply `norm_standard` function to avoid information leakage in every iteration. In this function you should build a list of dictionaries called `validation_dict` where each element in the list contains a dictionary with 4 keys name: `C, penalty, mu and sigma`. For every pair of parameters (`C and penalty`) you will run $ K $ validations and `mu and sigma` will be calculated as the average loss and standard deviation over $ K $ folds respectively. Use the function `log_loss` from `sklearn.metrics` that was already imported in `lin_classifier`. One more thing, you will have to implement a simple modification to `pred_log` function using the `flag` argument. When this flag is set to `True`, the function should return the probabilities of the classes and not the classes themselves. This is the output that `log_loss` function expects to get.
-# #
-# # This function might take a while to perform depending on $ K $ and the number of regularization parameters you will choose.
-#
-# # In[ ]:
-#
-#
-# C =  # make a list of up to 6 different values of regularization parameters and examine their effects
-# K =  # choose a number of folds
-# mode =  # mode of nsd function
-# val_dict = cv_kfold(X_train, y_train, C=C, penalty=['l1', 'l2'], K=K,mode=mode)
-#
-#
-# # Let's visualize your results:
-#
-# # In[ ]:
-#
-#
-# import scipy.stats as stats
-# for d in val_dict:
-#     x = np.linspace(0, d['mu'] + 3 * d['sigma'], 1000)
-#     plt.plot(x,stats.norm.pdf(x, d['mu'], d['sigma']), label="p = " + d['penalty'] + ", C = " + str(d['C']))
-#     plt.title('Gaussian distribution of the loss')
-#     plt.xlabel('Average loss')
-#     plt.ylabel('Probabilty density')
-# plt.legend()
-# plt.show()
-#
-#
-# # You can now choose parameters according to the results and train you model with the **full training set**.
-#
-# # In[ ]:
-#
-#
-# C =  # complete this part according to your best result
-# penalty =  # complete this part according to your best result
-# logreg = LogisticRegression(solver='saga', multi_class='ovr', penalty=penalty, C=C, max_iter=10000)
-# y_pred, w = pred_log(logreg,) # complete this function using nsd function
-#
-# cnf_matrix = metrics.confusion_matrix(y_test, y_pred)
-# ax1 = plt.subplot(211)
-# sns.heatmap(cnf_matrix, annot=True, xticklabels=['Normal','Suspect','Pathology'], yticklabels=['Normal','Suspect','Pathology'])
-# ax1.set(ylabel='True labels', xlabel='Predicted labels')
-# plt.show()
-# print("Accuracy is: " + str("{0:.2f}".format(100 * metrics.accuracy_score(y_test, y_pred))) + "%")
-# print("F1 score is: " + str("{0:.2f}".format(100 * metrics.f1_score(y_test, y_pred, average='macro'))) + "%")
-#
-#
-# # Great job! So as you can see results did get better but not by that much but you got the feeling how to handle with data, what are the basics of learning and what are the real effects and applications of what you saw in the lectures. Now, one last thing: A possible reason for the poor improvements is that our data is probably not linearly separable and we used a linear classifier. There are two basic approaches for this kind of problem:
-# # The first one is to use non-linear classifier and the second one is to perform a transformation on our data so it will become linearly separable in another space. Here is an example of 2D data that can also visualize the problem and the second approach:
-#
-# # <img src="https://sthalles.github.io/assets/fisher-ld/feature_transformation.png" width=600 align="center">
-#
-# # As you can see, the features were non-linearly transformed simply by squaring each feature.
-#
-# # ### Questions:
-# # **Q12:** Look at the given figure above. Why was it reasonable to expect that squaring each feature would make the data linearly separable?
-# #
-# # **Q13:** Suggest another non-linear transformation that would make the data linearly separable so that the line that separates the two data types will be perpendicular to one of the new axes. Write the new two features (axes) **explicitly** as a function of $ (x_1,x_2) $. Use LaTex to write mathematical operations.
-#
-# # ### Answers:
-# # **Q12:**
-# #
-# #
-# # **Q13:**
-#
-# # Finally, just to get the feeling of better results when we go non-linear, let's try the random forest classifier. All you have to do is just choose one of the modes of the `nsd` function and see if you got better results:
-#
-# # In[ ]:
-#
-#
-# from sklearn.ensemble import RandomForestClassifier as rfc
-# mode =  # choose your method
-# clf = rfc(n_estimators=10)
-# clf.fit(nsd(X_train, mode=mode), y_train)
-# y_pred = clf.predict(nsd(X_test, mode=mode))
-# cnf_matrix = metrics.confusion_matrix(y_test, y_pred)
-# ax = plt.subplot()
-# sns.heatmap(cnf_matrix, annot=True, xticklabels=['Normal', 'Suspect', 'Pathology'],
-#             yticklabels=['Normal', 'Suspect', 'Pathology'])
-# ax.set(ylabel='True labels', xlabel='Predicted labels')
-# plt.show()
-# print("Accuracy is: " + str("{0:.2f}".format(100 * metrics.accuracy_score(y_test, y_pred))) + "%")
-# print("F1 score is: " + str("{0:.2f}".format(100 * metrics.f1_score(y_test, y_pred, average='macro'))) + "%")
-#
-#
-# # That's all folks!
+odds, ratio = odds_ratio(w, X_test, selected_feat=selected_feat)  # you have to fill the right X first
+
+print(f'The odds ratio of {selected_feat} for Normal is {ratio}')
+print(f"The odds to be labeled as 'Normal' is {odds}")
+
+
+# ### Question:
+# **Q6:** What is the meaning of your results? Explain the difference between odds_ratio and odds.
+
+# ### Answers:
+# **Q6:**
+
+# Now let's see if normalization and standardization help us. Fill the next cell and print the three accuracies of the standardized and normalized training and testing data. *Important notes*:
+#
+# * Avoid information leakage! (from the test set to the train set)
+# * Do not apply the `norm_standard (nsd)` function on the labels.
+# * Set the `flag` argument to `False` when using `nsd` function.
+
+# In[ ]:
+
+
+# Implement your code here:
+mode = 'MinMax' # choose a mode from the `nsd`
+y_pred, w_norm_std = pred_log(logreg, nsd(X_train,selected_feat,mode) ,y_train, nsd(X_test,selected_feat,mode)) # complete this function using nsd function
+print("Accuracy is: " + str("{0:.2f}".format(100 * metrics.accuracy_score(y_test, y_pred))) + "%")
+print("F1 score is: " + str("{0:.2f}".format(100 * metrics.f1_score(y_test, y_pred, average='macro'))) + "%")
+
+
+# You can choose now one of the training-testing dataset and stick to it. Let's visualize our learned parameters. Use your chosen weight matrix as an input to the function `w_no_p_table` in the next cell.
+
+# In[ ]:
+
+
+input_mat =  w_norm_std # Fill this argument
+w_no_p_table(input_mat,orig_feat)
+
+
+# ### Questions:
+# **Q7:** Mention one advantage of using cross entropy as the cost function.
+#
+#
+# **Q8:** By selecting one feature at a time and compare their learned weights by looking at plots we had, what can you tell about the weights relations? Why does it happen? **Hint:** notice the sign of the weights and remember that an exponent is a monotonic function.
+
+# ### Answers:
+# **Q7:**
+#
+# **Q8:**
+
+# Ok, now let's recall that in the lecture you saw that accuracy is not always our best measure. Sensitivity and specificity can be much more informative and important mostly. The choice to train a model to have better results in sensitivity aspect rather than specificity or vice versa depends on our application.
+
+# In[ ]:
+
+
+cnf_matrix = metrics.confusion_matrix(y_test, y_pred)
+ax = plt.subplot()
+sns.heatmap(cnf_matrix, annot=True, xticklabels=['Normal','Suspect','Pathology'], yticklabels=['Normal','Suspect','Pathology'])
+ax.set(ylabel='True labels', xlabel='Predicted labels')
+plt.show()
+
+
+# ### Questions:
+# **Q9:** What do you think is more important to us with this data? What is the clinical risk/cost for False Positive (FP) and False Negative (FN)?
+
+# ### Answers:
+# **Q9:**
+
+# So, now we will try to handle one of the main issues in learning which is called **overfitting** and one way to deal with it is called **regularization**.
+#
+# There are several types of regularizations and in this assignment we will experience two of them:
+#
+# 1) Loss regularization.
+#
+# 2) Validation.
+#
+# The loss function is a function that takes the predicted values and the labels and *measures* how "close" they are to each other. Our demand is that this "distance" (metric) would be as low as possible. In addition to it, we can add more "demands" that can be represented mathematically. For example, we can demand that the number of coefficients won't get to large or we can try to restrict their values. A more physical example is a demand that our signal has to be smooth. When we try to minimize the new loss function we actually try to find the result which is the compromise of our demands. We can also "favor" one demand over another using **regularization parameters**.
+#
+# You saw in the lecture "demands" on the learned weights and represented those demands mathematically using $ L_1 $ and $ L_2 $ norms. The regularization parameter was denoted as $\lambda$ (please notice that sometimes it is common to use the notation of $ c $ where $\lambda = c^{-1}$). Now it's your turn to become artists! Change and/or add arguments to *LogisticRegression* class in the next cell and perform learning using two regularizations: $ L_1 $ and $ L_2 $. Examine your results using the confusion matrix as we did before. Tune your regularization parameter until you get a result that you think is reasonable and that brings the sensitivity/specificity (depending on what you chose before) to the maximum.
+
+# In[ ]:
+
+
+# Implement your code here:
+mode = 'MinMax' # choose a mode from the `nsd`
+logreg_l2 = LogisticRegression(solver='saga', multi_class='ovr', max_iter=10000, penalty='l2',C=0.1) # complete the arguments for L2
+y_pred_2, w2 = pred_log(logreg_l2, nsd(X_train,selected_feat,mode),y_train,nsd(X_test,selected_feat,mode)) # complete this function using nsd function
+cnf_matrix = metrics.confusion_matrix(y_test, y_pred_2)
+ax1 = plt.subplot(211)
+sns.heatmap(cnf_matrix, annot=True, xticklabels=['Normal','Suspect','Pathology'], yticklabels=['Normal','Suspect','Pathology'])
+ax1.set(ylabel='True labels', xlabel='Predicted labels')
+
+logreg_l1 = LogisticRegression(solver='saga', multi_class='ovr', max_iter=10000, penalty='l1',C=0.1) # complete the arguments for L1
+y_pred_1, w1 = pred_log(logreg_l1, nsd(X_train,selected_feat,mode ),y_train,nsd(X_test,selected_feat,mode))  # complete this function using nsd function
+cnf_matrix = metrics.confusion_matrix(y_test, y_pred_1)
+ax2 = plt.subplot(212)
+sns.heatmap(cnf_matrix, annot=True, xticklabels=['Normal','Suspect','Pathology'], yticklabels=['Normal','Suspect','Pathology'])
+ax2.set(ylabel='True labels', xlabel='Predicted labels')
+plt.show()
+
+
+# Now that you are happy with your results, let's compare the coefficients of the two norms.\
+# Choose two weighting matrices (one calculated using $ L_2 $ and the other calculated using $ L_1 $) and use them as inputs in `w_all_tbl` function. This function sorts the weights according to their $ L_2 $ norm (so the first argument has to be the matrix of $ L_2 $) and compares them to $L_1$.
+
+# In[ ]:
+
+
+w_all_tbl(w2, w1, orig_feat)
+
+
+# Notice that the features are ordered differently because they are sorted according to $ L_2 $ values.
+
+# ### Questions:
+# **Q10:** What is the difference that you can see when plotting $ L_1 $ vs. $ L_2 $? Could you expect it ahead?
+#
+# **Q11:** From the feature analysis, which of the features are most suggestive of fetuses at risk (pathology) versus normal? Elaborate on the meaning of these features in relation to the underlying physiology. You might want to have a look at the following [link](http://perinatology.com/Fetal%20Monitoring/Intrapartum%20Monitoring.htm).
+
+# ### Answers:
+# **Q10:**
+#
+#
+# **Q11:**
+
+# Now we will use a method that help us choose what we call *hyperparameters* of the model. This is also a method of regularization and it is called **validation**. There are several types of validation and here we will use *stratified K-fold cross validation*. The hyperparameters that we would like to choose are the norms that we want to train with and the regularization parameter. Again, we use stratification for the folds to prevent biased learning.
+#
+# Implement the function `cv_kfold` in `lin_classifier` module. We will use `X_train` as our training set that will be iteratively divided into $ K-1 $ training sets and one validation set. **Notice:** choose wisely where to apply `norm_standard` function to avoid information leakage in every iteration. In this function you should build a list of dictionaries called `validation_dict` where each element in the list contains a dictionary with 4 keys name: `C, penalty, mu and sigma`. For every pair of parameters (`C and penalty`) you will run $ K $ validations and `mu and sigma` will be calculated as the average loss and standard deviation over $ K $ folds respectively. Use the function `log_loss` from `sklearn.metrics` that was already imported in `lin_classifier`. One more thing, you will have to implement a simple modification to `pred_log` function using the `flag` argument. When this flag is set to `True`, the function should return the probabilities of the classes and not the classes themselves. This is the output that `log_loss` function expects to get.
+#
+# This function might take a while to perform depending on $ K $ and the number of regularization parameters you will choose.
+
+# In[ ]:
+
+
+C = [0.1,0.8,5,2.5,25] # make a list of up to 6 different values of regularization parameters and examine their effects
+K = 4 # choose a number of folds
+mode = 'MinMax' # mode of nsd function
+val_dict = cv_kfold(X_train, y_train, C=C, penalty=['l1', 'l2'], K=K,mode=mode)
+
+
+# Let's visualize your results:
+
+# In[ ]:
+
+
+import scipy.stats as stats
+for d in val_dict:
+    x = np.linspace(0, d['mu'] + 3 * d['sigma'], 1000)
+    plt.plot(x,stats.norm.pdf(x, d['mu'], d['sigma']), label="p = " + d['penalty'] + ", C = " + str(d['C']))
+    plt.title('Gaussian distribution of the loss')
+    plt.xlabel('Average loss')
+    plt.ylabel('Probabilty density')
+plt.legend()
+plt.show()
+
+
+# You can now choose parameters according to the results and train you model with the **full training set**.
+
+# In[ ]:
+
+#
+C =  2.5 # complete this part according to your best result
+penalty = 'l1' # complete this part according to your best result
+logreg = LogisticRegression(solver='saga', multi_class='ovr', penalty=penalty, C=C, max_iter=10000)
+y_pred, w = pred_log(logreg, nsd(X_train, selected_feat, mode = 'MinMax' ), y_train, nsd(X_test, selected_feat, mode = 'MinMax')) # complete this function using nsd function
+
+cnf_matrix = metrics.confusion_matrix(y_test, y_pred)
+ax1 = plt.subplot(211)
+sns.heatmap(cnf_matrix, annot=True, xticklabels=['Normal','Suspect','Pathology'], yticklabels=['Normal','Suspect','Pathology'])
+ax1.set(ylabel='True labels', xlabel='Predicted labels')
+plt.show()
+print("Accuracy is: " + str("{0:.2f}".format(100 * metrics.accuracy_score(y_test, y_pred))) + "%")
+print("F1 score is: " + str("{0:.2f}".format(100 * metrics.f1_score(y_test, y_pred, average='macro'))) + "%")
+
+
+# Great job! So as you can see results did get better but not by that much but you got the feeling how to handle with data, what are the basics of learning and what are the real effects and applications of what you saw in the lectures. Now, one last thing: A possible reason for the poor improvements is that our data is probably not linearly separable and we used a linear classifier. There are two basic approaches for this kind of problem:
+# The first one is to use non-linear classifier and the second one is to perform a transformation on our data so it will become linearly separable in another space. Here is an example of 2D data that can also visualize the problem and the second approach:
+
+# <img src="https://sthalles.github.io/assets/fisher-ld/feature_transformation.png" width=600 align="center">
+
+# As you can see, the features were non-linearly transformed simply by squaring each feature.
+
+# ### Questions:
+# **Q12:** Look at the given figure above. Why was it reasonable to expect that squaring each feature would make the data linearly separable?
+#
+# **Q13:** Suggest another non-linear transformation that would make the data linearly separable so that the line that separates the two data types will be perpendicular to one of the new axes. Write the new two features (axes) **explicitly** as a function of $ (x_1,x_2) $. Use LaTex to write mathematical operations.
+
+# ### Answers:
+# **Q12:**
+#
+#
+# **Q13:**
+
+# Finally, just to get the feeling of better results when we go non-linear, let's try the random forest classifier. All you have to do is just choose one of the modes of the `nsd` function and see if you got better results:
+
+# In[ ]:
+
+
+from sklearn.ensemble import RandomForestClassifier as rfc
+mode = 'MinMax' # choose your method
+clf = rfc(n_estimators=10)
+clf.fit(nsd(X_train, mode=mode), y_train)
+y_pred = clf.predict(nsd(X_test, mode=mode))
+cnf_matrix = metrics.confusion_matrix(y_test, y_pred)
+ax = plt.subplot()
+sns.heatmap(cnf_matrix, annot=True, xticklabels=['Normal', 'Suspect', 'Pathology'],
+            yticklabels=['Normal', 'Suspect', 'Pathology'])
+ax.set(ylabel='True labels', xlabel='Predicted labels')
+plt.show()
+print("Accuracy is: " + str("{0:.2f}".format(100 * metrics.accuracy_score(y_test, y_pred))) + "%")
+print("F1 score is: " + str("{0:.2f}".format(100 * metrics.f1_score(y_test, y_pred, average='macro'))) + "%")
+
+
+# That's all folks!

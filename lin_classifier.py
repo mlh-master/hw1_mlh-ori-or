@@ -19,7 +19,13 @@ def pred_log(logreg, X_train, y_train, X_test, flag=False):
     :return: A two elements tuple containing the predictions and the weightning matrix
     """
     # ------------------ IMPLEMENT YOUR CODE HERE:-----------------------------
+    logreg.fit(X_train, y_train)
 
+    if (flag == True):
+        return logreg.predict_proba(X_test)
+
+    w_log = logreg.coef_
+    y_pred_log = logreg.predict(X_test)
     # -------------------------------------------------------------------------
     return y_pred_log, w_log
 
@@ -83,7 +89,15 @@ def cv_kfold(X, y, C, penalty, K, mode):
             for train_idx, val_idx in kf.split(X, y):
                 x_train, x_val = X.iloc[train_idx], X.iloc[val_idx]
         # ------------------ IMPLEMENT YOUR CODE HERE:-----------------------------
-
+                y_train, y_test = y[train_idx], y[val_idx]
+                x_train = nsd(x_train,mode = mode)
+                x_val = nsd(x_val,mode = mode)
+                prob = pred_log(logreg,x_train,y_train,x_val,flag =True)
+                loss_val_vec[k] = log_loss(y_test , prob)
+                k = k+1
+            loss_average =  loss_val_vec.mean()
+            loss_stand_div =  loss_val_vec.std()
+            validation_dict.append({'C':c ,'penalty':p ,'mu':loss_average , 'sigma': loss_stand_div })
         # --------------------------------------------------------------------------
     return validation_dict
 
@@ -98,6 +112,21 @@ def odds_ratio(w, X, selected_feat='LB'):
              odds_ratio: the odds ratio of the selected feature and label
     """
     # ------------------ IMPLEMENT YOUR CODE HERE:-----------------------------
+#     w_normal = w[0, :]
+#     idx = X.columns.get_loc(selected_feat)
+#     odd_ratio = np.exp(w[idx])
+# #     odds = np.median(np.exp(X.dot(w[idx]).to_numpy()))
+#     w_transposed = np.transposed(w_normal)
+# #     odds = 1/(np.exp(X.dot(-(X @ w_transposed)))).median()
+#     odds_pre = (np.exp((X @ w_transposed)))
+#     odds - odds_pre.median()
+
+    i = X.columns.get_loc(selected_feat)
+    w_normal = w[i]
+    odd_ratio = np.exp(w_normal[i])
+    w_t = np.transpose(w_normal)
+    odd_pre = np.exp((X @ w_t))
+    odds = odd_pre.median()
 
     # --------------------------------------------------------------------------
 

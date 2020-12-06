@@ -54,28 +54,6 @@ def nan2num_samp(CTG_features, extra_feature):
     #     pd.Series(np.random.choice(temp[c].dropna()) )
 
 
-    #     cdf = np.cumsum(temp[c]) / np.sum(temp[c])
-    #     sort_temp = temp[c].sort_values(ascending=True)
-    #     num_of_nan = c_run[c].isnull().sum()
-    #     rand_vec = np.random.uniform(0, 1, num_of_nan)
-    #     sampeled_vec = []
-    #     j = 0
-    #
-    #     for i in range(num_of_nan):
-    #         for k in range(cdf.shape[0] - 1):
-    #             if ((rand_vec[i] <= cdf.values[k + 1]) & (rand_vec[i] >= cdf.values[k])):
-    #                 sampeled_vec.append(sort_temp.values[k])
-    #                 break
-    #
-    #     for row in range(c_run.shape[0]):
-    #         if (np.isnan(c_run[c].values[row])):
-    #             c_run[c].values[row] = sampeled_vec[j]
-    #             j = j + 1
-    #             if (j == num_of_nan):
-    #                 break
-    #
-    #     c_cdf.update({c: c_run[c]})
-
     # -------------------------------------------------------------------------
     return pd.DataFrame(c_cdf)
 

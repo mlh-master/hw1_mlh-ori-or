@@ -121,9 +121,9 @@ def odds_ratio(w, X, selected_feat='LB'):
 #     odds_pre = (np.exp((X @ w_transposed)))
 #     odds - odds_pre.median()
 
-    i = X.columns.get_loc(selected_feat)
-    w_normal = w[i]
-    odd_ratio = np.exp(w_normal[i])
+    idx = X.columns.get_loc(selected_feat)
+    w_normal = w[idx]
+    odd_ratio = np.exp(w_normal[idx])
     w_t = np.transpose(w_normal)
     odd_pre = np.exp((X @ w_t))
     odds = odd_pre.median()
